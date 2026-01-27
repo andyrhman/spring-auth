@@ -30,20 +30,21 @@ public class SecurityConfig {
         JwtAuthenticationFilter jwtFilter = new JwtAuthenticationFilter(jwtUtil);
 
         http
-            // disable CSRF for stateless API (if you use browser flows storing refresh in cookie,
-            // you need to apply CSRF protections or use SameSite + double-submit CSRF, see notes)
-            .csrf(csrf -> csrf.disable())
+                // disable CSRF for stateless API (if you use browser flows storing refresh in
+                // cookie,
+                // you need to apply CSRF protections or use SameSite + double-submit CSRF, see
+                // notes)
+                .csrf(csrf -> csrf.disable())
 
-            .sessionManagement(sess -> sess.sessionCreationPolicy(
-                org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
+                .sessionManagement(sess -> sess.sessionCreationPolicy(
+                        org.springframework.security.config.http.SessionCreationPolicy.STATELESS))
 
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/actuator/health", "/health-check").permitAll()
-                .anyRequest().authenticated()
-            )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/**", "/api/auth/**", "/actuator/health", "/health-check").permitAll()
+                        .anyRequest().authenticated())
 
-            // make sure JWT filter runs before UsernamePasswordAuthenticationFilter
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                // make sure JWT filter runs before UsernamePasswordAuthenticationFilter
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -21,6 +21,21 @@ public class SpringAuthApplication {
 		if (dotenv.get("APP_JWT_SECRET") != null) {
 			System.setProperty("APP_JWT_SECRET", dotenv.get("APP_JWT_SECRET"));
 		}
+		if (dotenv.get("SMTP_HOST") != null) {
+			System.setProperty("SMTP_HOST", dotenv.get("SMTP_HOST"));
+		}
+		if (dotenv.get("SMTP_PORT") != null) {
+			System.setProperty("SMTP_PORT", dotenv.get("SMTP_PORT"));
+		}
+		if (dotenv.get("SMTP_USER") != null) {
+			System.setProperty("SMTP_USER", dotenv.get("SMTP_USER"));
+		}
+		if (dotenv.get("SMTP_PASSWORD") != null) {
+			System.setProperty("SMTP_PASSWORD", dotenv.get("SMTP_PASSWORD"));
+		}
+		if (dotenv.get("APP_HOST") != null) {
+			System.setProperty("APP_HOST", dotenv.get("APP_HOST"));
+		}
 
 		SpringApplication.run(SpringAuthApplication.class, args);
 	}

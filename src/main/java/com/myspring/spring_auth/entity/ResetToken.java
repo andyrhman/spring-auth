@@ -8,14 +8,16 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "refresh_tokens")
+@Table(name = "password_reset_tokens", indexes = {
+        @Index(name = "idx_reset_token", columnList = "token")
+})
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = "tokenHash")
-public class RefreshToken {
+@ToString
+public class ResetToken {
 
     @Id
     @GeneratedValue
@@ -23,20 +25,18 @@ public class RefreshToken {
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "uuid")
     private UUID id;
 
-    // store hashed token
-    @Column(name = "token_hash", nullable = false, length = 128)
-    private String tokenHash;
+    @Column(nullable = false, unique = true, length = 64)
+    private String token;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", columnDefinition = "uuid")
-    private User user;
+    @Column(nullable = false)
+    private String email; // stored lowercase
 
-    @Column(name = "expires_at")
+    @Column(name = "expires_at", nullable = false)
     private Instant expiresAt;
 
     @Column(nullable = false)
     @Builder.Default
-    private boolean revoked = false;
+    private boolean used = false;
 
     @Column(name = "created_at", nullable = false)
     @Builder.Default
