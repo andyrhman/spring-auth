@@ -1,4 +1,4 @@
-package com.myspring.spring_auth.util;
+package com.myspring.spring_auth.exception;
 
 public class InvalidRequestException extends RuntimeException {
     public InvalidRequestException(String msg) {

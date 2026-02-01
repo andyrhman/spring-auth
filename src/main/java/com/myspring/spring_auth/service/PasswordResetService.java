@@ -1,7 +1,7 @@
 package com.myspring.spring_auth.service;
 
 import com.myspring.spring_auth.entity.ResetToken;
-import com.myspring.spring_auth.util.InvalidRequestException;
+import com.myspring.spring_auth.exception.InvalidRequestException;
 import com.myspring.spring_auth.repository.ResetTokenRepository;
 import com.myspring.spring_auth.repository.UserRepository;
 import com.myspring.spring_auth.repository.RefreshTokenRepository;
@@ -42,7 +42,7 @@ public class PasswordResetService {
     public void requestReset(String email) throws Exception {
         var userOpt = userRepo.findByEmail(email.toLowerCase(Locale.ROOT));
         if (userOpt.isEmpty()) {
-            throw new InvalidRequestException("User not found"); // or return success to avoid email harvesting
+            throw new IllegalArgumentException("User not found"); // or return success to avoid email harvesting
         }
         // generate token
         byte[] b = new byte[16];

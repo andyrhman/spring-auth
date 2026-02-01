@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import com.myspring.spring_auth.dto.RegisterRequest;
 import com.myspring.spring_auth.dto.LoginRequest;
-import com.myspring.spring_auth.util.InvalidCredentialsException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -97,8 +97,8 @@ public class AuthController {
             response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
             return ResponseEntity.ok(Map.of("accessToken", tokens.accessToken()));
-        } catch (InvalidCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", ex.getMessage()));
         }
     }
 

@@ -6,7 +6,6 @@ import com.myspring.spring_auth.repository.RefreshTokenRepository;
 import com.myspring.spring_auth.repository.UserRepository;
 import com.myspring.spring_auth.security.JwtUtil;
 import com.myspring.spring_auth.util.HashUtil;
-import com.myspring.spring_auth.util.InvalidCredentialsException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,10 +60,10 @@ public class AuthService {
         // try username first, then email
         User user = userRepo.findByUsername(usernameOrEmail)
                 .or(() -> userRepo.findByEmail(usernameOrEmail.toLowerCase(Locale.ROOT)))
-                .orElseThrow(InvalidCredentialsException::new);
+                .orElseThrow(IllegalArgumentException::new);
 
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new InvalidCredentialsException();
+            throw new IllegalArgumentException("Invalid credentials");
         }
 
         String access = jwtUtil.generateAccessToken(user.getUsername(), List.of("ROLE_USER"));

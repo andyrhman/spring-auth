@@ -1,4 +1,4 @@
-package com.myspring.spring_auth.util;
+package com.myspring.spring_auth.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,13 +60,9 @@ public class GlobalExceptionHandler {
                 .body(Map.of("message", "Internal server error"));
     }
 
-    @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<?> handleInvalidCreds(InvalidCredentialsException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "Invalid credentials"));
-    }
-
     @ExceptionHandler(InvalidRequestException.class)
     public ResponseEntity<?> handleInvalid(InvalidRequestException ex) {
         return ResponseEntity.badRequest().body(Map.of("message", ex.getMessage()));
     }
+
 }
