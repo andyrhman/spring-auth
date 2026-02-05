@@ -5,5 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public record LoginRequest(
         @JsonProperty("username") @NotBlank String usernameOrEmail,
-        @JsonProperty("password") @NotBlank String password) {
-}
+        @JsonProperty("password") @NotBlank String password,
+        @JsonProperty("rememberMe") boolean rememberMe
+) {}

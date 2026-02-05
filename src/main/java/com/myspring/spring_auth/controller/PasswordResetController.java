@@ -4,9 +4,7 @@ import com.myspring.spring_auth.dto.ForgotRequest;
 import com.myspring.spring_auth.dto.ResetRequest;
 import com.myspring.spring_auth.service.PasswordResetService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +15,6 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class PasswordResetController {
 
-    private static final Logger log = LoggerFactory.getLogger(PasswordResetController.class);
-
     private final PasswordResetService passwordResetService;
 
     public PasswordResetController(PasswordResetService passwordResetService) {
@@ -27,13 +23,17 @@ public class PasswordResetController {
 
     @PostMapping("/forgot")
     public ResponseEntity<?> forgot(@RequestBody @Valid ForgotRequest req) {
+
         String email = req.email().trim().toLowerCase(Locale.ROOT);
         try {
+
             passwordResetService.requestReset(email);
             return ResponseEntity
                     .ok(Map.of("message", "If an account with that email exists, a reset link has been sent."));
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", ex.getMessage()));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(Map.of("message", ex.getMessage()));
+        }
+
     }
 
     @PostMapping("/reset")

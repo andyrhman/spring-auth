@@ -42,4 +42,8 @@ public class User {
     @Column(name = "created_at", nullable = false)
     @Builder.Default
     private Instant createdAt = Instant.now();
+
+    @Column(name = "tfa_secret", length = 128)
+    @Builder.Default
+    private String tfaSecret = ""; 
 }
