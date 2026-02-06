@@ -152,7 +152,7 @@ public class AuthService {
             byte[] secretBytes = new byte[20];
             rnd.nextBytes(secretBytes);
             String base32Secret = base32.encodeToString(secretBytes).replace("=", "");
-            String otpAuthUrl = buildOtpAuthUrl("MyApp", user.getUsername(), base32Secret);
+            String otpAuthUrl = buildOtpAuthUrl("SpringAuth", user.getUsername(), base32Secret);
             out.put("secret", base32Secret);
             out.put("otpauth_url", otpAuthUrl);
             return new LoginBeginResult(out);
