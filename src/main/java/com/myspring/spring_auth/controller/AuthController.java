@@ -84,28 +84,22 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
-    // Login: returns either 2FA info or immediate tokens depending on user's TFA
-    // state
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Validated LoginRequest req) {
         try {
             var res = authService.beginLogin(req.usernameOrEmail(), req.password(), req.rememberMe());
-            // res is a Map-like record; it can contain:
-            // - { id, rememberMe } -> 2FA required
-            // - { id, rememberMe, secret, otpauth_url } -> enrollment instructions
+
             return ResponseEntity.ok(res);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(401).body(Map.of("message", "Invalid credentials"));
         }
     }
 
-    // Two-factor endpoint: verifies code, issues tokens and sets refresh cookie
     @PostMapping("/two-factor")
     public ResponseEntity<?> twoFactor(@RequestBody @Validated TwoFactorRequest req, HttpServletResponse response) {
         try {
             var tokensWithExpiry = authService.completeTwoFactor(req.id(), req.code(), req.secret(), req.rememberMe());
 
-            // create cookie with refresh token expiry in days
             ResponseCookie cookie = ResponseCookie.from(cookieName, tokensWithExpiry.refreshToken())
                     .httpOnly(true)
                     .secure(true)
@@ -120,17 +114,6 @@ public class AuthController {
             return ResponseEntity.status(401).body(Map.of("message", "Invalid credentials"));
         }
     }
-
-    // Optional: endpoint to return otpauth URI only (if you want server to build QR
-    // image)
-    // @GetMapping("/qr/{userId}")
-    // public ResponseEntity<?> qr(@PathVariable String userId) {
-    // Optional<User> u = userRepo.findById(UUID.fromString(userId));
-    // if (u.isEmpty())
-    // return ResponseEntity.notFound().build();
-    // String otpAuthUrl = authService.buildOtpAuthUrl(u.get());
-    // return ResponseEntity.ok(Map.of("otpauth_url", otpAuthUrl));
-    // }
 
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(HttpServletRequest request, HttpServletResponse response) {

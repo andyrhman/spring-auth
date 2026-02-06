@@ -28,11 +28,7 @@ public class QrController {
         this.userRepo = userRepo;
     }
 
-    /**
-     * Stateless: generate PNG QR from provided secret (Base32), account, issuer.
-     * WARNING: do not expose this publicly in production with real secrets in URLs.
-     * Example: /api/auth/qr?secret=EM4E...&account=test1&issuer=MyApp
-     */
+    // ! WARNING: do not expose this publicly in production with real secrets in URLs.
     @GetMapping(value = "/qr", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> qrFromQuery(
             @RequestParam("secret") String base32Secret,
@@ -45,11 +41,6 @@ public class QrController {
                 .body(png);
     }
 
-    /**
-     * Use persisted tfaSecret for user (must be enrolled). Returns 404 if not
-     * found.
-     * Example: /api/auth/qr/2b62... (userId as UUID)
-     */
     @GetMapping(value = "/qr/{userId}", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> qrFromUser(@PathVariable String userId) throws Exception {
         UUID id = UUID.fromString(userId);
@@ -64,8 +55,6 @@ public class QrController {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_PNG_VALUE)
                 .body(png);
     }
-
-    /* ---------- helpers ---------- */
 
     private static String buildOtpAuthUrl(String issuer, String accountName, String base32Secret) {
         // URL-encode fields prudently for production; kept simple here
