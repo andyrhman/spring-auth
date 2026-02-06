@@ -1,11 +1,21 @@
 # Spring Booth Auth
 
+<p align="center">
+  <img src="https://brandlogos.net/wp-content/uploads/2026/01/spring_boot_symbol-logo_brandlogos.net_tkqz9-300x300.png" />
+</p>
+
 This is my first time working on API server using java and by the time i started learning spring boot... boy oh boy... it's pretty complicated compared to previous API framework like  nodejs, django or gofiber. The spring boot project structure has a similiarty to nestjs project structure like entity, service, repository and whatnot which is nice.
 
 ## How to run spring boot
 
 ```bash
 ./mvnw spring-boot:run
+```
+
+If somehow there is an error after installing new package
+
+```bash
+./mvnw clean package
 ```
 
 ## Installing Java using SDKMAN
